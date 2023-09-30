@@ -163,6 +163,11 @@ class EventSource {
   _handleEvent(response) {
     const parts = response.substr(this.lastIndexProcessed).split('\n');
     this.lastIndexProcessed = response.lastIndexOf('\n\n') + 2;
+    if (this.lastIndexProcessed == (-1 + 2)) {
+      // If we couldn't find a \n\n it can be that there's only 1 message and it does not have a separator
+      // In this case, the last index is the end of the message
+      this.lastIndexProcessed = response.length - 1
+    }
     let data = [];
     let retry = 0;
     let line = '';
